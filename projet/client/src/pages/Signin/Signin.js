@@ -106,8 +106,8 @@ class Signin extends React.Component {
                 
           });
           alert("Inscription terminée !")
-          window.location.href= "localhost:3000/"
-          //window.location.href= "http://localhost:3000/"
+          window.location.href= "135.125.101.210/"
+          //window.location.href= "http://135.125.101.210/"
         };
     }
         

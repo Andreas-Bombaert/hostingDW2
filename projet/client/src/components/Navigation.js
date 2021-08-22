@@ -77,7 +77,7 @@ class Navigation extends Component {
             //afficher en tant qu'user connecté
 
             
-            window.location.href= "localhost:3000/"
+            window.location.href= "135.125.101.210/"
             
             
     }

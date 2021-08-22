@@ -40,7 +40,7 @@ class Home extends React.Component {
                 "timeout": 10000,
                 "transports": ["websocket"]
             },
-            endpoint: 'localhost:5003',
+            endpoint: '135.125.101.210:5003',
             message: { type: undefined, title: undefined, txt: undefined, variant: undefined },
             defStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
 
@@ -362,7 +362,7 @@ class Home extends React.Component {
         localStorage.setItem('gameId', gameId)
         localStorage.setItem('turn', orderedLobby)
         lobbySocket.emit('launchGame', gameId)
-        window.location.href = "http://localhost:3000/game"
+        window.location.href = "http://135.125.101.210/game"
     }
 
 
@@ -565,7 +565,7 @@ class Home extends React.Component {
             localStorage.setItem('user', user)
             localStorage.setItem('gameId', gameId)
 
-            window.location.href = "http://localhost:3000/game"
+            window.location.href = "http://135.125.101.210/game"
         })
 
     }

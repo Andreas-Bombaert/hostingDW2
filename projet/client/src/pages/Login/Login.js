@@ -54,8 +54,8 @@ class Signin extends React.Component {
                     if(res){
                         
                         localStorage.setItem('Connect', true)
-                        window.location.href= "localhost:3000/"
-                        //window.location.href= "http://localhost:3000/"
+                        window.location.href= "135.125.101.210/"
+                        //window.location.href= "http://135.125.101.210/"
                         }
                        
                 })
@@ -68,7 +68,7 @@ class Signin extends React.Component {
                 localStorage.setItem('Email', this.state.email)
                 localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)
                 localStorage.getItem('Connect')
-                window.location.href= "http://localhost:3000/" */
+                window.location.href= "http://135.125.101.210/" */
             }
         }
       }

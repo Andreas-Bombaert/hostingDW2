@@ -45,7 +45,7 @@ class Game extends Component {
                 "timeout": 10000,
                 "transports": ["websocket"]
             },
-            endpoint: 'localhost:5002',
+            endpoint: '135.125.101.210:5002',
 
             /* RAW DATA */
             playersData: null,
