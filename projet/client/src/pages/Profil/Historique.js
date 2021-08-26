@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 //import Container from 'react-bootstrap/Container'
 //import ListItem from '@material-ui/core/ListItem';
+import CookieConsent from 'react-cookie-consent';
 
 class Historique extends React.Component {
 
@@ -59,10 +60,19 @@ class Historique extends React.Component {
                     </Col>
                     
                 </Row>     
-                    
+                <CookieConsent
+                                onAccept={localStorage.setItem('Cookies',true)}
+                                location="bottom"
+                                style={{ backgroundColor : 'DarkRed', fontSize:20}}
+                                buttonStyle={{backgroundColor:"palegoldenrod", fontSize:20}}
+                                buttonText="I agree !"
+                                expires={365}>
+                             
+                                This website uses cookies, accept them to remove the banner
+                </CookieConsent>    
             </html>
         );
     }
 }
 
-export default Historique
+export default Historique;

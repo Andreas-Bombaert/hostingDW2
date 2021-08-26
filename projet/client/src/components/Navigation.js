@@ -4,6 +4,9 @@ import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap';
 import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
 import Rules from '../pages/Rules/Rules';
+import CookieConsent from 'react-cookie-consent';
+import Popup from 'reactjs-popup';
+
 //import Login from '../pages/Login/Login'
 
 class Navigation extends Component {
@@ -13,8 +16,9 @@ class Navigation extends Component {
         this.state={
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
-           guestPseudo : '',
-           
+           guestPseudo : localStorage.getItem('guestPseudo'),
+           cookiesAccept : localStorage.getItem('Cookies'),
+           donneesGuest:''
         
         
            } 
@@ -24,6 +28,7 @@ class Navigation extends Component {
       }
     
 
+  
     pageSwitch= () => {
 
         const actualPage = this.props.actualPage;
@@ -48,13 +53,14 @@ class Navigation extends Component {
         localStorage.setItem('Connect', false)
         this.setState({connectedAsGuest: false})
         localStorage.setItem('ConnectedAsGuest', false)
+        window.location.href= "http://135.125.101.210/"
         
     }
 
-    handleLoginGuest(event){
+    async handleLoginGuest(event){
         event.preventDefault();
         localStorage.setItem('ConnectedAsGuest', true)
-       
+        console.log(this.state.guestPseudo)
         fetch('http://135.125.101.210:5000/guest', {
             method: 'POST',
             headers: {
@@ -64,8 +70,6 @@ class Navigation extends Component {
             },
         }).then(response => response.json())
             .then(json => {
-                this.setState({guestPseudo: json["message"]})
-                localStorage.setItem('guestPseudo',this.state.guestPseudo)
                 
             }).catch((error) => {
 
@@ -76,13 +80,27 @@ class Navigation extends Component {
             
             //afficher en tant qu'user connecté
 
+        console.log(this.state.donneesGuest.Pseudo)
+           
+        
+
+
+        await fetch(`http://135.125.101.210:5000/pseudoguest`)
+          .then(response => response.json())
+          .then(json => {
+            this.setState({donneesGuest: json[0].Pseudo})
             
-            window.location.href= "135.125.101.210/"
-            
-            
+          })
+          
+          
+        
+        localStorage.setItem('guestPseudo', this.state.donneesGuest)  
+        window.location.href= "http://135.125.101.210/"  
     }
 
+    
     render() {
+        
         if(this.state.connected==="true"){
             return (
                 <main id="maincomponent">
@@ -178,6 +196,16 @@ class Navigation extends Component {
                         </Row>
     
                     </Container>
+                    <CookieConsent
+                                onAccept={localStorage.setItem('Cookies',true)}
+                                location="bottom"
+                                style={{ backgroundColor : 'DarkRed', fontSize:20}}
+                                buttonStyle={{backgroundColor:"palegoldenrod", fontSize:20}}
+                                buttonText="I agree !"
+                                expires={365}>
+                             
+                                This website uses cookies, accept them to remove the banner
+                    </CookieConsent> 
                 </main>
             );
                                         
@@ -271,6 +299,17 @@ class Navigation extends Component {
                         </Row>
     
                     </Container>
+
+                    <CookieConsent
+                                onAccept={localStorage.setItem('Cookies',true)}
+                                location="bottom"
+                                style={{ backgroundColor : 'DarkRed', fontSize:20}}
+                                buttonStyle={{backgroundColor:"palegoldenrod", fontSize:20}}
+                                buttonText="I agree !"
+                                expires={365}>
+                             
+                                This website uses cookies, accept them to remove the banner
+                    </CookieConsent>
                 </main>
             );
                                         
@@ -383,6 +422,18 @@ class Navigation extends Component {
                         </Row>
     
                     </Container>
+                    
+                    <CookieConsent
+                                onAccept={localStorage.setItem('Cookies',true)}
+                                location="bottom"
+                                style={{ backgroundColor : 'DarkRed', fontSize:20}}
+                                buttonStyle={{backgroundColor:"palegoldenrod", fontSize:20}}
+                                buttonText="I agree !"
+                                expires={365}>
+                             
+                                This website uses cookies, accept them to remove the banner
+                    </CookieConsent>
+                
                 </main>
             );
         }

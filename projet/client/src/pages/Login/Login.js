@@ -3,6 +3,7 @@ import NavigationAutres from "../../components/NavigationAutres";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Container from 'react-bootstrap/Container'
+import CookieConsent from 'react-cookie-consent';
 
 class Signin extends React.Component {
 
@@ -54,8 +55,8 @@ class Signin extends React.Component {
                     if(res){
                         
                         localStorage.setItem('Connect', true)
-                        window.location.href= "135.125.101.210/"
-                        //window.location.href= "http://135.125.101.210/"
+                        
+                        window.location.href= "http://135.125.101.210/"
                         }
                        
                 })
@@ -117,7 +118,17 @@ class Signin extends React.Component {
                             </Container>
                         </form>  
                     </Col>
-                </Row>     
+                </Row> 
+                <CookieConsent
+                                onAccept={localStorage.setItem('Cookies',true)}
+                                location="bottom"
+                                style={{ backgroundColor : 'DarkRed', fontSize:20}}
+                                buttonStyle={{backgroundColor:"palegoldenrod", fontSize:20}}
+                                buttonText="I agree !"
+                                expires={365}>
+                             
+                                This website uses cookies, accept them to remove the banner
+                </CookieConsent>    
             </html>
         );
     }
