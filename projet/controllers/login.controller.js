@@ -37,6 +37,25 @@ exports.findAllUsers = (req, res) => {
   
     };
 
+
+exports.findPseudoGuest = (req, res) => {
+      login.findPseudoGuest( (err, data) => {
+        if (err) {
+          if (err.kind === "not_found") {
+            res.status(404).send({
+            });
+          } else {
+            res.status(500).send({
+              
+            });
+          }
+        } else {
+          res.header("Access-Control-Allow-Origin", "*");
+          res.send(data);
+        }
+      });
+  
+    };
 /*exports.findPasswordUser = (req, res) => {
     login.findPasswordUser( (err, data) => {
       if (err) {

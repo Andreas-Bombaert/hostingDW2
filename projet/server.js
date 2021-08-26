@@ -46,8 +46,11 @@ const http = require('http');
 const { response } = require('express');
 const { cpuUsage } = require('process');
 const { emit } = require('./model/db');
-const server = http.createServer(app)
-const io = socketio(server)
+const server = http.createServer(app);
+const io = require('socket.io')(server, {
+  'path': '/app1socket',
+  'transports': ['websocket', 'polling']
+});
 
 io.on('connection', (socket) => {
   socket.emit('connection', socket.id)
@@ -56,14 +59,14 @@ io.on('connection', (socket) => {
   socket.on('join_game', function (data) {
     const game_id = data.gid
     const user = data.user
-  
+
     socket.leaveAll();
     socket.join(game_id)
     socket.channel = game_id
     socket.user = user
     console.log(`Player ${user} connected to ${game_id} .`)
-    
-    
+
+
     fetch(`http://135.125.101.210:5000/lobby/${game_id}`)
       .then(response => response.json())
       .then(json => {socket.emit('playerList', json)})
@@ -82,7 +85,7 @@ io.on('connection', (socket) => {
     fetch(`http://135.125.101.210:5000/pothistory/${game_id}`)
       .then(response => response.json())
       .then(json => { socket.emit('potHist', json)})
-    
+
     console.log(`Player ${user} received his cards`)
   })
 
@@ -110,7 +113,7 @@ io.on('connection', (socket) => {
             .catch(erreur => { throw erreur})
     })
 
-    
+
 
     socket.in(socket.channel).emit('newpile', newpile)
 
@@ -155,13 +158,13 @@ io.on('connection', (socket) => {
                   pseudo: data
               })
           })
-    
+
     fetch(`http://135.125.101.210:5000/ccount/${game_id}/${user}`)
       .then(response => response.json())
       .then(json => { socket.emit('updateCards', json) })
       .catch(erreur => { throw erreur})
     socket.to(socket.channel).emit('userPlayed', data)
-      
+
   })
   socket.on('needPotHistory', (data)=> {
     fetch(`http://135.125.101.210:5000/pothistory/${game_id}`)
@@ -175,7 +178,7 @@ io.on('connection', (socket) => {
       .then(response => response.json())
       .then(json => { socket.emit('updateCards', json) })
   })
-  socket.on('finishTurnPass', (data) => {  
+  socket.on('finishTurnPass', (data) => {
     socket.to(socket.channel).emit('userPassed', data)
   })
   socket.on('startPlaying', (data) => {
@@ -198,7 +201,7 @@ io.on('connection', (socket) => {
     fetch(`http://135.125.101.210:5000/potd/${socket.channel}`)
   })
   socket.on('endOfRound', data => {
-    
+
     fetch('http://135.125.101.210:5000/pothistory/card', {
                 method: 'POST',
                 headers: {
@@ -214,7 +217,7 @@ io.on('connection', (socket) => {
     socket.to(socket.channel).emit('newRound', socket.user)
   })
   socket.on('delCardFinish', (data)=>{
-    
+
     const rank = data.rank
     const user = data.us
     const list= data.finlist
@@ -281,14 +284,14 @@ io.on('connection', (socket) => {
     await fetch(`http://135.125.101.210:5000/lobby/${socket.channel}`)
       .then(response => response.json())
       .then(json => {jsoned = json})
-    socket.to(socket.channel).emit('endOfGame', jsoned) 
+    socket.to(socket.channel).emit('endOfGame', jsoned)
   })
   socket.on('refreshEOG', async (data)=>{
     let jsoned
     await fetch(`http://135.125.101.210:5000/lobby/${data}`)
       .then(response => response.json())
       .then(json => {jsoned = json})
-    socket.emit('endOfGame', jsoned) 
+    socket.emit('endOfGame', jsoned)
   })
 
   socket.on('readyAnother', async (data)=>{
@@ -407,7 +410,7 @@ io.on('connection', (socket) => {
     const usr = data.usr
     const num = data.num
     const recieveUsr= data.pseudo
-    
+
     if(num === 1){
       const card1 = data.cards[0]
       await fetch(`http://135.125.101.210:5000/dcard/${socket.channel}/${usr}/${card1}`)
@@ -456,12 +459,18 @@ server.listen(GAME_PORT, () => {
 
 /********** LOBBY SOCKET**********/
 
-const serverLobby = http.createServer(app)
-const ioLobby = socketio(serverLobby)
+const serverLobby = http.createServer(app);
+const ioLobby = require('socket.io')(server,
+  {
+  'path': '/app2socket',
+  'transports': ['websocket', 'polling']
+}
+
+);
 
 ioLobby.on('connection', (socket) => {
   socket.emit('connection',)
-  socket.on('repconnection', (data) => {
+  socket.on('reconnection', (data) => {
     socket.user = data.user;
     //socket.gameId = data.gid;
     //socket.leaveAll();

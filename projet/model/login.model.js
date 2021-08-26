@@ -15,6 +15,17 @@ const login = function () {
     })
   },
 
+  login.findPseudoGuest=(result) => {
+    sql.query('SELECT * FROM joueurs ORDER BY Id DESC LIMIT 1;', (err,res) => {
+        if(err) {
+            console.log("error : ", err);
+            result (null ,err);
+            return;
+            }
+            console.log("donnees :" , res);
+            result (null, res);
+    })
+  },
 
   /*login.findPasswordUser=(log, result) => {
     sql.query('SELECT Password from joueurs where Email = "'+log.mail+'"', (err,res) => {
