@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require('cors');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const fetch = require('node-fetch');
 const path = require('path');
 
