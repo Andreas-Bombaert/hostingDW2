@@ -37,10 +37,11 @@ class Home extends React.Component {
             connectionConfig: {
                 "force new connection": true,
                 "reconnectionAttemps": "Infinity",
-                "timeout": 10000,
-                "transports": ["websocket"]
+                "timeout":75,
+                "transports": ["websocket","polling"],
+                "path" : '/app2socket'
             },
-            endpoint: '135.125.101.210:5003',
+            endpoint: 'http://135.125.101.210:5003/app2socket',
             message: { type: undefined, title: undefined, txt: undefined, variant: undefined },
             defStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
 
@@ -49,7 +50,7 @@ class Home extends React.Component {
         this.handleCreate = this.handleCreate.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleLeave = this.handleLeave.bind(this)
-        lobbySocket = io(this.state.endpoint, this.state.connectionConfig);
+        lobbySocket = io.connect(this.state.endpoint, this.state.connectionConfig);
     }
     /**************  HOME **************/
 
@@ -178,7 +179,7 @@ class Home extends React.Component {
             .then(response => response.json())
             .then(json => {
                 if (json[0].bool === 0) {
-                    const msg = { type: 'pool', title: "Lobby not found", txt: "The lobby you want to join no longer exists, if the lobby is still displayed, please contact an administrator", variant: 'danger' }
+                    const msg = { type: 'pool', title: "Lobby not found", txt: "The lobby you want to join no longer exists, if the lobby is still displ               ayed, please contact an administrator", variant: 'danger' }
                     this.setState({ message: msg });
                     return 0;
                 }
@@ -207,9 +208,9 @@ class Home extends React.Component {
 
 
 
-    
-    
-    
+
+
+
     //handle leaving a lobby
 
     handleLeave() {
@@ -611,10 +612,6 @@ class Home extends React.Component {
                                 </Row>
                             </Container>
                         </Row>
-
-
-
-
                     </Col>
                 </Container>
             )
@@ -640,13 +637,13 @@ class Home extends React.Component {
 
                                         <label>
                                             <p>Lobby's name :</p>
-                                            <input type="text" value={this.state.gameId} onChange={text => this.setState({ gameId: text.target.value })} />
+                                            <input type="text" value={this.state.gameId} onChange={text => this.setState({ gameId: text.target.value })}                />
                                         </label>
                                         <br /><br />
 
                                         <label>
                                             <p>Amount of player : </p>
-                                            <Select options={options} value={this.state.maxPlayers} onChange={value => this.setState({ maxPlayers: value })} />
+                                            <Select options={options} value={this.state.maxPlayers} onChange={value => this.setState({ maxPlayers: value                })} />
                                         </label>
                                         <br /><br />
                                         <input type="submit" value="Create lobby" />
@@ -679,8 +676,8 @@ class Home extends React.Component {
                             >
                                 Create Game
                             </Button>
-                           
-                            
+
+
                             <br />
                         </Row>
                         <Col>
@@ -722,4 +719,3 @@ class Home extends React.Component {
 
     }
 }
-export default Home

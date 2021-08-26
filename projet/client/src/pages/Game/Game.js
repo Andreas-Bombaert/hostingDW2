@@ -10,7 +10,7 @@ import io from "socket.io-client";
             fin de round
             fin de game
             envoi stats
-            page de fin 
+            page de fin
 
 */
 let gameSocket
@@ -42,10 +42,11 @@ class Game extends Component {
             connectionConfig: {
                 "force new connection": true,
                 "reconnectionAttemps": "Infinity",
-                "timeout": 10000,
-                "transports": ["websocket"]
+                "timeout": 75,
+                "transports": ["websocket","polling"],
+                "path": '/app1socket'
             },
-            endpoint: '135.125.101.210:5002',
+            endpoint: 'htpp://135.125.101.210:5002/app1socket',
 
             /* RAW DATA */
             playersData: null,
@@ -86,8 +87,8 @@ class Game extends Component {
             }
 
         }
-        gameSocket = io(this.state.endpoint, this.state.connectionConfig)
-        
+        gameSocket = io.connect(this.state.endpoint, this.state.connectionConfig)
+
     }
 
     /********************** Game Function **********************/
@@ -203,7 +204,7 @@ class Game extends Component {
         }
     }
 
-    
+
 
 
     isRoundOver = (cards, cardsNum) => {
@@ -231,7 +232,7 @@ class Game extends Component {
         return 0;
     }
 
-   
+
 
 
     generatePlayersData = () => {
@@ -283,7 +284,7 @@ class Game extends Component {
             }
         )
         this.setState({ player1: p1, player2: p2, player3: p3, player4: p4, player5: p5 })
-        
+
     }
 
 
@@ -365,8 +366,8 @@ class Game extends Component {
             else {
 
                 const message = { type: 'finish', title: 'You just played', message: 'Wait for your turn.', variant: 'success' }
-                
-                
+
+
                 const user = this.state.currentUser
                 let counter = this.state.countTurn
                 counter++;
@@ -521,7 +522,7 @@ class Game extends Component {
                 }, this.generatePlayersData)
             })
         })
-        
+
         gameSocket.on('cardsPot', (sdata) => {
             const json = sdata
             json.forEach(({ user, card }) => {
@@ -533,7 +534,7 @@ class Game extends Component {
                 })
             })
         })
-        
+
         gameSocket.on('newpile', (sdata) =>{
             const newpile = sdata
             this.setState({ pile: newpile })
